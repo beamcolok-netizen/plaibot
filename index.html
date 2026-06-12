@@ -2,123 +2,213 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ระบบเรียก PO</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    overflow:hidden;
+body, html {
+    height: 100%;
+    width: 100%;
+    background: #0b0f19;
+    overflow: hidden;
 }
 
-.card{
-    text-align:center;
-    color:white;
-    padding:40px;
-    border-radius:20px;
-    backdrop-filter:blur(10px);
-    background:rgba(255,255,255,0.08);
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
-    animation:fadeIn .8s ease;
+/* หน้าจอโหลดข้อมูล (Splash Screen) */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+    z-index: 999;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logo{
-    width:90px;
-    height:90px;
-    margin:auto;
-    border-radius:50%;
-    background:#22c55e;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:40px;
-    margin-bottom:20px;
-    animation:pulse 2s infinite;
+.card {
+    text-align: center;
+    color: white;
+    padding: 40px 50px;
+    border-radius: 24px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    animation: fadeIn .6s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 90%;
+    width: 360px;
 }
 
-h1{
-    margin-bottom:10px;
+.logo {
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38px;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
+    animation: pulse 2s infinite ease-in-out;
 }
 
-p{
-    opacity:.8;
+h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
 }
 
-.loader{
-    width:220px;
-    height:8px;
-    background:rgba(255,255,255,.15);
-    border-radius:20px;
-    margin:25px auto 0;
-    overflow:hidden;
+p {
+    font-size: 13px;
+    opacity: .6;
+    letter-spacing: 0.05em;
 }
 
-.loader span{
-    display:block;
-    height:100%;
-    width:0%;
-    background:#22c55e;
-    animation:loading 2s linear forwards;
+.status-text {
+    margin-top: 18px;
+    font-size: 14px;
+    color: #4ade80;
+    font-weight: 500;
+    min-height: 22px;
+    transition: all 0.3s ease;
 }
 
-@keyframes loading{
-    from{width:0%;}
-    to{width:100%;}
+.loader {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    margin-top: 15px;
+    overflow: hidden;
+    position: relative;
 }
 
-@keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.1);}
-    100%{transform:scale(1);}
+/* หลอกตาผู้ใช้ให้แถบวิ่งไปนิ่งอยู่ที่ 90% ก่อน เพื่อรอหน้าเว็บจริงโหลดเสร็จ */
+.loader span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    box-shadow: 0 0 8px #4ade80;
+    border-radius: 10px;
+    animation: fakeLoading 4s cubic-bezier(0.05, 0.8, 0.1, 1) forwards;
 }
 
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+/* หน้าจอจริงที่จะแสดงหลังโหลดเสร็จ */
+#app-frame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+@keyframes fakeLoading {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 92%; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
+    50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(34, 197, 94, 0.6); }
+    100% { transform: scale(1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
-
 <body>
 
-<div class="card">
-    <div class="logo">📃</div>
-
-    <h1>ระบบเรียก PO</h1>
-
-    <p>PO Alert System</p>
-
-    <div class="loader">
-        <span></span>
+<div id="loading-screen">
+    <div class="card">
+        <div class="logo">📃</div>
+        <h1>ระบบเรียก PO</h1>
+        <p>PO BOT TRACKER</p>
+        
+        <div class="loader">
+            <span id="progress-bar"></span>
+        </div>
+        
+        <div class="status-text" id="status-message">กำลังเชื่อมต่อระบบ...</div>
     </div>
-
-    <p style="margin-top:15px;">
-        กำลังเข้าสู่ระบบ...
-    </p>
 </div>
 
+<iframe 
+    id="app-frame" 
+    src="https://script.google.com/macros/s/AKfycbyJdIx68ynNzg8W-jKNog3fRYaJrEjP1eh3IEGbtwV3zH8lPONl82xTPFNUFLr8G1pS1g/exec?page=alert"
+    scrolling="yes">
+</iframe>
+
 <script>
-setTimeout(() => {
-    window.location.href =
-    "https://script.google.com/macros/s/AKfycbyJdIx68ynNzg8W-jKNog3fRYaJrEjP1eh3IEGbtwV3zH8lPONl82xTPFNUFLr8G1pS1g/exec?page=alert";
-}, 2000);
+const iframe = document.getElementById('app-frame');
+const loadingScreen = document.getElementById('loading-screen');
+const statusMessage = document.getElementById('status-message');
+const progressBar = document.getElementById('progress-bar');
+
+// ข้อความสถานะแบบไดนามิก ช่วยลดความรู้สึกน่าเบื่อระหว่างรอระบบตื่นตัว
+const dynamicMessages = [
+    "กำลังเชื่อมต่อฐานข้อมูล...",
+    "ตรวจสอบรายการสัปดาห์นี้...",
+    "จัดเตรียมหน้าต่างแสดงผล...",
+    "ใกล้เสร็จเรียบร้อยแล้ว..."
+];
+
+let messageIndex = 0;
+const messageInterval = setInterval(() => {
+    if (messageIndex < dynamicMessages.length) {
+        statusMessage.style.opacity = 0;
+        setTimeout(() => {
+            statusMessage.innerText = dynamicMessages[messageIndex];
+            statusMessage.style.opacity = 1;
+            messageIndex++;
+        }, 300);
+    }
+}, 1200);
+
+// ดักจับเหตุการณ์เมื่อหน้าเว็บของ Google Apps Script โหลดข้อมูลภายในเสร็จสมบูรณ์ 100%
+iframe.onload = function() {
+    clearInterval(messageInterval);
+    
+    statusMessage.innerText = "โหลดข้อมูลเสร็จสิ้น!";
+    statusMessage.style.color = "#4ade80";
+    
+    // ดันแถบโหลดให้เต็มร้อยทันที
+    progressBar.style.animation = "none";
+    progressBar.style.width = "100%";
+    
+    // หน่วงเวลาเล็กน้อยเพื่อให้ผู้ใช้เห็นสถานะเสร็จสิ้น ก่อนจะเฟดหน้าจอสลับกันอย่างนุ่มนวล
+    setTimeout(() => {
+        loadingScreen.style.opacity = '0';
+        iframe.style.opacity = '1';
+        
+        // ล้าง Loading Screen ออกจากมิติพื้นหลังหลังการเฟดเสร็จสิ้น
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 600);
+    }, 400);
+};
 </script>
 
 </body>
