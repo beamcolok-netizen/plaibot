@@ -1,11 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=https://script.google.com/macros/s/AKfycbyJdIx68ynNzg8W-jKNog3fRYaJrEjP1eh3IEGbtwV3zH8lPONl82xTPFNUFLr8G1pS1g/exec?page=alert">
-<title>Redirecting...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบเรียก PO</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    overflow:hidden;
+}
+
+.card{
+    text-align:center;
+    color:white;
+    padding:40px;
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+    background:rgba(255,255,255,0.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    animation:fadeIn .8s ease;
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    margin:auto;
+    border-radius:50%;
+    background:#22c55e;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:40px;
+    margin-bottom:20px;
+    animation:pulse 2s infinite;
+}
+
+h1{
+    margin-bottom:10px;
+}
+
+p{
+    opacity:.8;
+}
+
+.loader{
+    width:220px;
+    height:8px;
+    background:rgba(255,255,255,.15);
+    border-radius:20px;
+    margin:25px auto 0;
+    overflow:hidden;
+}
+
+.loader span{
+    display:block;
+    height:100%;
+    width:0%;
+    background:#22c55e;
+    animation:loading 2s linear forwards;
+}
+
+@keyframes loading{
+    from{width:0%;}
+    to{width:100%;}
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+</style>
 </head>
+
 <body>
-กำลังเข้าสู่หน้าเรียก PO...
+
+<div class="card">
+    <div class="logo">📦</div>
+
+    <h1>ระบบเรียก PO</h1>
+
+    <p>Production Planning & PO Alert System</p>
+
+    <div class="loader">
+        <span></span>
+    </div>
+
+    <p style="margin-top:15px;">
+        กำลังเข้าสู่ระบบ...
+    </p>
+</div>
+
+<script>
+setTimeout(() => {
+    window.location.href =
+    "https://script.google.com/macros/s/AKfycbyJdIx68ynNzg8W-jKNog3fRYaJrEjP1eh3IEGbtwV3zH8lPONl82xTPFNUFLr8G1pS1g/exec?page=alert";
+}, 2000);
+</script>
+
 </body>
 </html>
